@@ -43,6 +43,10 @@ export const TodoApp = () => {
     dispatch({ type: "DELETE", payload: todoId });
   };
 
+  const handleComplete = (todoId) => {
+    dispatch({ type: "COMPLETED", payload: todoId });
+  };
+
   return (
     <div>
       <h1>Todo App ({todos.length})</h1>
@@ -52,7 +56,11 @@ export const TodoApp = () => {
           <ul>
             {todos.map((todo, i) => (
               <li key={todo.id} className="d-flex mt-3">
-                <p style={{ cursor: "pointer" }}>
+                <p
+                  className={todo.done ? "completed" : ""}
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handleComplete(todo.id)}
+                >
                   {i + 1}. {todo.description}
                 </p>
                 <button
@@ -77,7 +85,7 @@ export const TodoApp = () => {
                   id="colFormLabel"
                   value={description}
                   onChange={handleInputChange}
-                  placeholder=" Enter Your Email Address "
+                  placeholder="Todo"
                 />
               </div>
 

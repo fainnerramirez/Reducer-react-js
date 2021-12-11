@@ -1,3 +1,8 @@
 body {
   padding: 50px;
 }
+
+.completed {
+  text-decoration: line-through;
+  color: red;
+}
