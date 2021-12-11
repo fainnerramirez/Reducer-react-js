@@ -1,33 +1,44 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useEffect } from "react";
+import { useForm } from "../../customHooks/useForm";
 import "./style.css";
 import { todoReducer } from "./todoReducer";
 
-const initialState = [
-  {
-    id: new Date().getTime(),
-    description: "aprendiendo react",
-    done: false,
-  },
-];
+const init = () => {
+  return JSON.parse(localStorage.getItem("TODOS")) || [];
+
+  /*return [
+    {
+      id: new Date().getTime(),
+      description: "aprendiendo react",
+      done: false,
+    },
+  ];*/
+};
 
 export const TodoApp = () => {
-  const [todos, dispatch] = useReducer(todoReducer, initialState);
+  const [todos, dispatch] = useReducer(todoReducer, [], init);
+
+  const [{ description }, handleInputChange, reset] = useForm({
+    description: "",
+  });
+
+  useEffect(() => {
+    localStorage.setItem("TODOS", JSON.stringify(todos));
+  }, [todos]);
+
+  console.log(description);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const newTodo = {
       id: new Date().getTime(),
-      description: "Nuevo todo",
+      description: description,
       done: false,
     };
 
-    const action = {
-      type: "ADD",
-      payload: newTodo,
-    };
-
-    dispatch(action);
+    dispatch({ type: "ADD", payload: newTodo });
+    reset();
   };
 
   return (
@@ -38,7 +49,7 @@ export const TodoApp = () => {
         <div className="col">
           <ul>
             {todos.map((todo, i) => (
-              <li key={todo.id}>
+              <li key={todo.id} className="d-flex mt-3">
                 <p style={{ cursor: "pointer" }}>
                   {i + 1}. {todo.description}
                 </p>
@@ -58,8 +69,11 @@ export const TodoApp = () => {
               <div className="col-sm-10">
                 <input
                   type="text"
+                  name="description"
                   className="form-control"
                   id="colFormLabel"
+                  value={description}
+                  onChange={handleInputChange}
                   placeholder=" Enter Your Email Address "
                 />
               </div>
