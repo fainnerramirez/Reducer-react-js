@@ -1,11 +1,12 @@
 import "./App.css";
+import { TodoProvider } from "./components/useContext/TodoContext";
 import { TodoApp } from "./components/useReducer/TodoApp";
 
 function App() {
   return (
-    <div className="App">
+    <TodoProvider>
       <TodoApp />
-    </div>
+    </TodoProvider>
   );
 }
 

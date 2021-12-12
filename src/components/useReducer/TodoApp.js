@@ -1,51 +1,20 @@
-import React, { useReducer, useEffect } from "react";
-import { useForm } from "../../customHooks/useForm";
+import React, { useContext, useEffect } from "react";
+import { TodoContext } from "../useContext/TodoContext";
 import "./style.css";
-import { todoReducer } from "./todoReducer";
-
-const init = () => {
-  return JSON.parse(localStorage.getItem("TODOS")) || [];
-
-  /*return [
-    {
-      id: new Date().getTime(),
-      description: "aprendiendo react",
-      done: false,
-    },
-  ];*/
-};
 
 export const TodoApp = () => {
-  const [todos, dispatch] = useReducer(todoReducer, [], init);
-
-  const [{ description }, handleInputChange, reset] = useForm({
-    description: "",
-  });
+  const {
+    todos,
+    description,
+    handleSubmit,
+    handleInputChange,
+    handleDelete,
+    handleComplete,
+  } = useContext(TodoContext);
 
   useEffect(() => {
     localStorage.setItem("TODOS", JSON.stringify(todos));
   }, [todos]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const newTodo = {
-      id: new Date().getTime(),
-      description: description,
-      done: false,
-    };
-
-    dispatch({ type: "ADD", payload: newTodo });
-    reset();
-  };
-
-  const handleDelete = (todoId) => {
-    dispatch({ type: "DELETE", payload: todoId });
-  };
-
-  const handleComplete = (todoId) => {
-    dispatch({ type: "COMPLETED", payload: todoId });
-  };
 
   return (
     <div>
